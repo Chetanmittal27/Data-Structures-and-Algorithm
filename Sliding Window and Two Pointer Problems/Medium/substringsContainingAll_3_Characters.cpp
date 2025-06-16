@@ -38,3 +38,37 @@ int main(){
 }
     
 */
+
+
+// Optimal approach
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int numberofSubstrings(string s){
+
+    vector<int>hash(3 , -1);
+    int n = s.size();
+    int number = 0;
+
+    for(int i=0;i<n;i++){
+
+        hash[s[i] - 'a'] = i;
+
+        if(hash[0] != -1 && hash[1] != -1 && hash[2] != -1){
+
+            int minPossibleIndex = *min_element(hash.begin() , hash.end());
+
+            number = number + (minPossibleIndex + 1);
+        }
+    }
+    return number;
+}
+
+int main(){
+    string s = "abcabc";
+    cout << numberofSubstrings(s);
+    return 0;
+}
