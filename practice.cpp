@@ -1,134 +1,149 @@
-#include<iostream>
-#include<vector>
-#include<map>
-#include<queue>
-#include<stack>
+#include <iostream>
 using namespace std;
 
-class Node{
-    public:
-       int data;
-       Node* left;
-       Node* right;
+class Node
+{
+public:
+    int data;
+    Node *left;
+    Node *right;
 
-    public:
-       Node(int d){
+public:
+    Node(int d)
+    {
         data = d;
         left = nullptr;
         right = nullptr;
-       }
+    }
 };
 
-Node* createBinaryTree(Node* root){
-    cout << "Enter the root node " << endl;
-    int val;
-    cin >> val;
+Node *insertIntoTree(Node *root, int val)
+{
 
-    root = new Node(val);
-
-    if(val == -1){
-        return NULL;
+    if (root == NULL)
+    {
+        root = new Node(val);
+        return root;
     }
 
-    cout << "Enter the node in the left of the node " << val << endl;
-    root -> left = createBinaryTree(root);
-    cout << "Enter the node in the right of the node " << val << endl;
-    root -> right = createBinaryTree(root);
+    if (val > root->data)
+    {
+        root->right = insertIntoTree(root->right, val);
+    }
+
+    else
+    {
+        root->left = insertIntoTree(root->left, val);
+    }
 
     return root;
 }
 
-bool isLeaf(Node* root){
-    return root && !root -> left && !root -> right;
+int max_value(Node *root)
+{
+    Node *temp = root;
+
+    while (temp->right != NULL)
+    {
+        temp = temp->right;
+    }
+
+    return temp->data;
 }
 
+Node* deleteNode(Node *root, int x)
+{
 
-void addLeftBoundary(Node* root , vector<int>&ans){
+    if (root == NULL)
+    {
+        return root;
+    }
 
-    Node* current = root -> left;
-    while(current){
-        if(!isLeaf(current)){
-            ans.push_back(current -> data);
+    if (root -> data == x)
+    {
+        // No child
+        if (root->left == NULL && root->right == NULL)
+        {
+            delete root;
+            return NULL;
         }
 
-        if(current -> left){
-            current = current -> left;
+        // 1 child
+
+        // left child only
+        if (root->left != NULL && root->right == NULL)
+        {
+            Node *temp = root->left;
+            delete root;
+            return temp;
         }
 
-        else{
-            current = current -> right;
+        // right child only
+        if (root->left == NULL && root->right != NULL)
+        {
+            Node *temp = root->right;
+            delete root;
+            return temp;
         }
+
+        // 2 childs
+        if (root->left != NULL && root->right != NULL)
+        {
+            int maxi = max_value(root->left);
+            root->data = maxi;
+            root->left = deleteNode(root->left, maxi);
+
+            return root;
+        }
+    }
+
+    else if(x > root -> data){
+        root -> right = deleteNode(root -> right , x);
+    }
+
+    else{
+        root -> left = deleteNode(root -> left , x);
+    }
+
+    return root;
+}
+
+void takeInput(Node *&root)
+{
+
+    int val;
+    cin >> val;
+
+    while (val != -1)
+    {
+        root = insertIntoTree(root, val);
+        cin >> val;
     }
 }
 
-
-void addLeavesNodes(Node* root , vector<int>&ans){
-    if(isLeaf(root)){
-        ans.push_back(root -> data);
+void preorder(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
     }
 
-    if(root -> left){
-        addLeavesNodes(root -> left , ans);
-    }
-
-    if(root -> right){
-        addLeavesNodes(root -> right , ans);
-    }
+    cout << root->data << " ";
+    preorder(root->left);
+    preorder(root->right);
 }
 
-void addRightBoundary(Node* root , vector<int>&ans){
-    Node* current = root -> right;
+int main()
+{
+    Node *root = NULL;
 
-    stack<int>s;
+    takeInput(root);
 
-    while(current){
-        if(!isLeaf(current)){
-            s.push(current -> data);
-        }
+    preorder(root);
+    cout << endl;
 
-        if(current -> left){
-            current = current -> left;
-        }
-
-        else{
-            current = current -> right;
-        }
-    }
-
-    while(!s.empty()){
-        ans.push_back(s.top());
-        s.pop();
-    }
-
-}
-
-vector<int>BoundaryTraversal(Node* root){
-
-    vector<int>ans;
-    if(root == NULL){
-        return ans;
-    }
-
-    if(!isLeaf(root)){
-        ans.push_back(root -> data);
-    }
-
-    addLeftBoundary(root , ans);
-    addLeavesNodes(root , ans);
-    addRightBoundary(root , ans);
-
-    return ans;
-}
-
-int main(){
-    Node* root = NULL;
-    root = createBinaryTree(root);
-
-    vector<int>result = BoundaryTraversal(root);
-
-    for(auto it : result){
-        cout << it << " ";
-    }
-
+    root = deleteNode(root, 3);
+    preorder(root);
+    cout << endl;
     return 0;
 }
