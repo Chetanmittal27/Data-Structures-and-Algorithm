@@ -1,24 +1,28 @@
 #include<iostream>
+#include<vector>
+
 using namespace std;
 
-int fibonacci(int n){
+int triangularSum(vector<int> &nums){
 
-    int i = 0;
-    int j = 1;
+    while(nums.size() != 1){
 
-    for(int k = 2;k<=n;k++){
-        int current = i + j;
-        i = j;
-        j = current;
+        vector<int>newNums(nums.size()-1);
+
+        for(int i=0;i<newNums.size();i++){
+            newNums[i] = (nums[i] + nums[i+1]) % 10;
+        }
+
+        triangularSum(newNums);
     }
-
-    return j;
+    
+    return nums[0];
 }
 
-int main(){
-    int n;
-    cin >> n;
 
-    cout << fibonacci(n);
+int main(){
+    vector<int>nums = {1,2,3,4,5};
+    
+    cout << triangularSum(nums);
     return 0;
 }
