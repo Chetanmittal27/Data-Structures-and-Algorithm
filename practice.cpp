@@ -1,28 +1,94 @@
 #include<iostream>
 #include<vector>
-
 using namespace std;
 
-int triangularSum(vector<int> &nums){
+class Node{
 
-    while(nums.size() != 1){
+    public:
+       int data;
+       Node* left;
+       Node* right;
 
-        vector<int>newNums(nums.size()-1);
+    public:
+       Node(int d){
+           data = d;
+           left = nullptr;
+           right = nullptr;
+       }
+};
 
-        for(int i=0;i<newNums.size();i++){
-            newNums[i] = (nums[i] + nums[i+1]) % 10;
-        }
+Node* CreateBinaryTree(Node* root){
 
-        triangularSum(newNums);
+    int val;
+    cout << "Enter the new node" << endl;
+    cin >> val;
+
+    root = new Node(val);
+
+    if(val == -1){
+        return NULL;
     }
-    
-    return nums[0];
+
+    cout << "Enter the data at the left of " << val << endl;
+    root -> left = CreateBinaryTree(root -> left);
+
+    cout << "Enter the data at the right of " << val << endl;
+    root -> right = CreateBinaryTree(root -> right);
+
+}
+
+
+void inorder(Node* root){
+
+    if(root == NULL){
+        return;
+    }
+
+    inorder(root -> left);
+    cout << root -> data << " ";
+    inorder(root -> right);
+}
+
+void preorder(Node* root){
+
+    if(root == NULL){
+        return;
+    }
+
+    cout << root -> data << " ";
+    preorder(root -> left);
+    preorder(root -> right);
+}
+
+void postorder(Node* root){
+
+    if(root == NULL){
+        return;
+    }
+
+    postorder(root -> left);
+    postorder(root -> right);
+    cout << root -> data << " ";
 }
 
 
 int main(){
-    vector<int>nums = {1,2,3,4,5};
+
+    Node* root = NULL;
+    root = CreateBinaryTree(root);
+
+    cout << "Inorder of the Binary Tree is : ";
+    inorder(root);
+    cout << endl;
     
-    cout << triangularSum(nums);
+    cout << "Preorder of the Binary Tree is : ";
+    preorder(root);
+    cout << endl;
+
+    cout << "Postorder of the Binary Tree is : ";
+    postorder(root);
+    cout << endl;
+
+
     return 0;
 }

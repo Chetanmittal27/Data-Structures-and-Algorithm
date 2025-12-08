@@ -1,56 +1,64 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
 class Node{
-    public:
-    int data;
-    Node* left;
-    Node* right;
 
     public:
-    Node(int d){
-        data = d;
-        left = nullptr;
-        right = nullptr;
-    }
+       int data;
+       Node* left;
+       Node* right;
+
+    public:
+       Node(int d){
+           data = d;
+           left = nullptr;
+           right = nullptr;
+       }
 };
 
-Node* createBinaryTree(Node* root){
-    cout << "Enter the root node" << endl;
-    int data;
-    cin >> data;
+Node* CreateBinaryTree(Node* root){
 
-    root = new Node(data);
+    int val;
+    cout << "Enter the new node" << endl;
+    cin >> val;
 
-    if(data == -1){
+    root = new Node(val);
+
+    if(val == -1){
         return NULL;
     }
 
-    cout << "Enter the node left to the node " << data << endl;
-    root -> left = createBinaryTree(root);
-    cout << "Enter the node right to the node " << data << endl;
-    root -> right = createBinaryTree(root);
+    cout << "Enter the data at the left of " << val << endl;
+    root -> left = CreateBinaryTree(root -> left);
 
-    return root;
+    cout << "Enter the data at the right of " << val << endl;
+    root -> right = CreateBinaryTree(root -> right);
+
 }
 
-void postOrder(Node* root){
 
-    if(root == nullptr){
+void postorder(Node* root){
+
+    if(root == NULL){
         return;
     }
 
-    postOrder(root -> left);
-    postOrder(root -> right);
+    postorder(root -> left);
+    postorder(root -> right);
     cout << root -> data << " ";
 }
 
-int main(){
-    Node* root = NULL;
-    root = createBinaryTree(root);
 
-    postOrder(root);
+int main(){
+
+    Node* root = NULL;
+    root = CreateBinaryTree(root);
+
+    cout << "Postorder of the Binary Tree is : ";
+    postorder(root);
     cout << endl;
+
 
     return 0;
 }
