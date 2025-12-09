@@ -1,6 +1,6 @@
 #include<iostream>
 #include<vector>
-#include<queue>
+#include<stack>
 using namespace std;
 
 class Node{
@@ -40,56 +40,128 @@ Node* CreateBinaryTree(Node* root){
 }
 
 
-vector<vector<int>>traversal(Node* root){
+vector<int>preorder(Node* root){
 
-    vector<vector<int>>ans;
+    vector<int>ans;
 
     if(root == NULL){
         return ans;
     }
 
-    queue<Node*>q;
-    q.push(root);
+    stack<Node*>s;
+    s.push(root);
 
-    while(!q.empty()){
+    while(!s.empty()){
 
-        int n = q.size();
-        vector<int>temp;
+        Node* temp = s.top();
+        s.pop();
 
-        for(int i=0;i<n;i++){
+        ans.push_back(temp -> data);
 
-            Node* it = q.front();
-            q.pop();
-
-            temp.push_back(it -> data);
-
-
-            if(it -> left != NULL){
-                q.push(it -> left);
-            }
-
-            if(it -> right != NULL){
-                q.push(it -> right);
-            }
+        if(temp -> right){
+            s.push(temp -> right);
         }
 
-        ans.push_back(temp);
+
+        if(temp -> left){
+            s.push(temp -> left);
+        }
     }
 
     return ans;
 }
+
+
+vector<int>inorder(Node* root){
+
+    vector<int>ans;
+
+    if(root == NULL) return ans;
+
+    stack<Node*>st;
+    Node* node = root;
+
+    while(true){
+
+        if(node != NULL){
+            st.push(node);
+            node = node -> left;
+        }
+
+        else{
+
+            if(st.empty()) break;
+            else{
+                node = st.top();
+                st.pop();
+
+                ans.push_back(node -> data);
+                node = node -> right;
+            }
+        }
+    }
+
+    return ans;
+}
+
+
+vector<int>postorder(Node* root){
+
+    vector<int>ans;
+
+    if(root == NULL) return ans;
+
+    stack<Node*>s;
+    Node* curr = root;
+
+    while(curr != NULL || !s.empty()){
+
+        if(curr != NULL){
+
+            s.push(curr);
+            curr = curr -> left;
+        }
+
+        else{
+
+            Node* temp = s.top() -> right;
+
+            if(temp == NULL){
+
+                temp = s.top();
+                s.pop();
+                ans.push_back(temp -> data);
+
+                while(!s.empty() && temp == s.top() -> right){
+
+                    temp = s.top();
+                    s.pop();
+                    ans.push_back(temp -> data);
+                }
+            }
+
+            else{
+                curr = temp;
+            }
+        }
+    }
+
+    return ans;
+}
+
+
 
 int main(){
 
     Node* root = NULL;
     root = CreateBinaryTree(root);
 
-    vector<vector<int>>result = traversal(root);
+    vector<int>result = inorder(root);
 
-    for(auto level : result){
-        for(auto element : level){
-            cout << element << " ";
-        }
+    for(auto it : result){
+        cout << it << " ";
     }
+
+
     return 0;
 }
