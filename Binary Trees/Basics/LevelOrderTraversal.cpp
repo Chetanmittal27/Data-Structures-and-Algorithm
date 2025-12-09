@@ -1,43 +1,95 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        vector<vector<int>>result;
-        if(root == NULL) return result;
-        queue<TreeNode*>q;
-        q.push(root);
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
 
-        while(!q.empty()){
-            int size = q.size();
-            vector<int>level;
+class Node{
+    public: 
+        int data;
+        Node* left;
+        Node* right;
+    
+    public:
+        Node(int d){
+            data = d;
+            left = nullptr;
+            right = nullptr;
+        }
+};
 
-            for(int i=0;i<size;i++){
-                TreeNode* temp = q.front();
-                q.pop();
+Node* CreateBinaryTree(Node* root){
 
-                if(temp -> left){
-                    q.push(temp -> left);
-                }
+    int val;
+    cout << "Enter the node" << endl;
+    cin >> val;
 
-                if(temp -> right){
-                    q.push(temp -> right);
-                }
+    if(val == -1){
+        return NULL;
+    }
 
-                level.push_back(temp -> val);
+    root = new Node(val);
+
+    cout << "Enter the node in the left of " << val << endl;
+    root -> left = CreateBinaryTree(root -> left);
+
+    cout << "Enter the node in the right of " << val << endl;
+    root -> right = CreateBinaryTree(root -> right);
+
+
+    return root;
+}
+
+
+vector<vector<int>>traversal(Node* root){
+
+    vector<vector<int>>ans;
+
+    if(root == NULL){
+        return ans;
+    }
+
+    queue<Node*>q;
+    q.push(root);
+
+    while(!q.empty()){
+
+        int n = q.size();
+        vector<int>temp;
+
+        for(int i=0;i<n;i++){
+
+            Node* it = q.front();
+            q.pop();
+
+            temp.push_back(it -> data);
+
+
+            if(it -> left != NULL){
+                q.push(it -> left);
             }
 
-            result.push_back(level);
+            if(it -> right != NULL){
+                q.push(it -> right);
+            }
         }
-        return result;
+
+        ans.push_back(temp);
     }
-};
+
+    return ans;
+}
+
+int main(){
+
+    Node* root = NULL;
+    root = CreateBinaryTree(root);
+
+    vector<vector<int>>result = traversal(root);
+
+    for(auto level : result){
+        for(auto element : level){
+            cout << element << " ";
+        }
+    }
+    return 0;
+}
