@@ -13,7 +13,7 @@ Since the answer may be large, return it modulo 109 + 7
 
 
 // Brute Force
-
+/*
 #include<iostream>
 #include<vector>
 
@@ -43,6 +43,84 @@ int specialTriplets(vector<int>& nums){
 
     return int(count % MOD);
 }
+*/
+
+// Better Approach
+// #include<iostream>
+// #include<vector>
+
+// using namespace std;
+
+// const int MOD = 1e9 + 10;
+
+// int specialTriplets(vector<int>& nums){
+
+//     int n = nums.size();
+
+//     long long count = 0;
+
+//     for(int j=1;j<n-1;j++){
+
+//         int left = 0 , right = 0;
+
+//         for(int i=0;i<j;i++){
+//             if(nums[i] == 2 * nums[j]){
+//                 left++;
+//             }
+//         }
+
+//         for(int k=j+1;k<n;k++){
+
+//             if(nums[k] == 2 * nums[j]){
+//                 right++;
+//             }
+//         }
+
+//         count = count + (left * right);
+//     }
+
+//     return int(count % MOD);
+// }
+
+
+// Optimised Approach
+
+#include<iostream>
+#include<vector>
+#include<unordered_map>
+
+using namespace std;
+
+const int MOD = 1e9 + 10;
+
+
+int specialTriplets(vector<int>& nums){
+
+    int n = nums.size();
+
+    long long count = 0;
+
+    unordered_map<int , long long>left;
+    unordered_map<int , long long>right;
+
+    left[nums[0]]++;
+
+    for(int k=2;k<n;k++){
+
+        right[nums[k]]++;
+    }
+
+
+    for(int j=1;j<n-1;j++){
+
+        int val = 2 * nums[j];
+        count = count + (left[val] * right[val]);
+        left[nums[j]]++;
+        right[nums[j+1]]--;
+    }
+
+    return int (count % MOD);
+}
 
 int main(){
 
@@ -52,3 +130,4 @@ int main(){
 
     return 0;
 }
+
