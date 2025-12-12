@@ -53,10 +53,9 @@ int Diameter(Node* root){
         return 0;
     }
 
+    int op3 = Height(root -> left) + Height(root -> right);
     int op1 = Diameter(root -> left);
     int op2 = Diameter(root -> right);
-
-    int op3 = Height(root -> left) + Height(root -> right);
 
     return max(op1 , max(op2 , op3));
 }
