@@ -20,11 +20,12 @@ Node* createBinaryTree(Node* root){
     int data;
     cin >> data;
 
-    root = new Node(data);
-
     if(data == -1){
         return NULL;
     }
+    
+    root = new Node(data);
+
 
     cout << "Enter the node left to the node " << data << endl;
     root -> left = createBinaryTree(root);
