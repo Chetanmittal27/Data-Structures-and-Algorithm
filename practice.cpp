@@ -1,7 +1,34 @@
-for(int i=2;i<=n;i++){
+#include<iostream>
+using namespace std;
 
-    while(n % i == 0  &&  n > 1){
-        ans.push_back(i);
-        n = n / i;
+int func(int num){
+    
+    int ans = 1;
+    int i = 2;
+
+    while(num != 1 && i <= num/2){
+
+        if(num % i == 0){
+            ans = ans * i;
+            num = num / i;
+        }
+
+        else{
+            i++;
+        }
     }
+
+    if(num != 1){
+        return num;
+    }
+
+    return ans;
+}
+
+
+int main(){
+    int num;
+    cin >> num;
+
+    cout << "LCM of " << num << " is " << func(num) << endl;
 }
