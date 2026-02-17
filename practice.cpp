@@ -1,34 +1,36 @@
 #include<iostream>
+#include<vector>
+
 using namespace std;
 
-int func(int num){
-    
-    int ans = 1;
-    int i = 2;
-
-    while(num != 1 && i <= num/2){
-
-        if(num % i == 0){
-            ans = ans * i;
-            num = num / i;
-        }
-
-        else{
-            i++;
-        }
-    }
-
-    if(num != 1){
-        return num;
-    }
-
-    return ans;
-}
-
-
 int main(){
-    int num;
-    cin >> num;
+    int v , n;
 
-    cout << "LCM of " << num << " is " << func(num) << endl;
+    cout << "Enter the number of vertices" << endl;
+    cin >> v;
+
+    cout << "Enter the number of Edges" << endl;
+    cin >> n;
+
+    vector<vector<int>>adj(v, vector<int>(v , 0));
+
+    for(int i=0;i<n;i++){
+        int p1 , p2;
+        cout << "Enter end vertices of edge" << endl;
+        cin >> p1 >> p2;
+
+        adj[p1][p2] = 1;
+        adj[p2][p1] = 1;
+    }
+
+
+    for(auto it : adj){
+        for(auto ele : it){
+            cout << ele << " ";
+        }
+
+        cout << endl;
+    }
+
+    return 0;
 }
