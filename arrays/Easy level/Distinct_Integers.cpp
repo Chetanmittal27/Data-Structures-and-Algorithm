@@ -1,15 +1,16 @@
 #include<iostream>
-#include<vector>
-#include<unordered_set>
+#include<set>
+
 using namespace std;
 
 int main(){
     int n;
     cin >> n;
 
-    unordered_set<int>s;
+    set<int>s;
 
     for(int i=0;i<n;i++){
+
         int num;
         cin >> num;
 
@@ -17,6 +18,6 @@ int main(){
     }
 
     cout << s.size();
-    
+
     return 0;
 }
