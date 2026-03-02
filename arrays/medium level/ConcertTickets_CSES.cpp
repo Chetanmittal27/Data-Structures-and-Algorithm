@@ -31,21 +31,32 @@ int main(){
     for(int j=0;j<m;j++){
 
         int val = -1;
-        for(auto it : mpp){
+        
+        auto it = mpp.lower_bound(maxPrices[j]);
 
-            if(it.first <= maxPrices[j]){
-                val = it.first;
+        if(it -> first == maxPrices[j]){
+            val = it -> first;
+        }
+
+        else{
+            if(it == mpp.begin()){
+                val = -1;
             }
 
             else{
-                break;
+                --it;
+                val = it -> first;
             }
         }
 
         cout << val << endl;
-        mpp[val]--;
-        if(mpp[val] == 0){
-            mpp.erase(val);
+
+        if(val != -1){
+            mpp[val]--;
+
+            if(mpp[val] == 0){
+                mpp.erase(val);
+            }
         }
     }
 
